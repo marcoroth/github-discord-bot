@@ -38,7 +38,7 @@ MAPPINGS.each do |prefix, repo|
 
       type = url.include?('pull') ? 'PR' : 'Issue'
 
-      event << "`#{reference}` - #{type} by #{user}: \"#{title}\""
+      event << "`#{reference}` - #{type} by @#{user}: \"#{title}\""
       event << "[#{url}]"
     rescue
       event.respond "https://github.com/#{repo}/issues/#{number}"
