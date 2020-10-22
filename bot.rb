@@ -24,24 +24,27 @@ MAPPINGS = {
 
 MAPPINGS.each do |prefix, repo|
   bot.message(contains: "#{prefix}#") do |event|
-    message = event.message.content
-    reference = message.match(/#{prefix}#\d+/).to_s
-    _, number = reference.split('#')
+    event.message.content.scan(/#{prefix}#\d+/).each do |reference|
+      _, number = reference.split('#')
 
-    begin
-      gh_repo = client.repo repo
-      data = gh_repo.rels[:issues].get(uri: { number: number }).data
+      begin
+        gh_repo = client.repo repo
+        data = gh_repo.rels[:issues].get(uri: { number: number }).data
 
-      title = data[:title]
-      user = data[:user][:login]
-      url = data[:html_url]
+        title = data[:title]
+        user = data[:user][:login]
+        url = data[:html_url]
 
-      type = url.include?('pull') ? 'PR' : 'Issue'
+        type = url.include?('pull') ? 'PR' : 'Issue'
 
-      event << "`#{reference}` - #{type} by @#{user}: \"#{title}\""
-      event << "[#{url}]"
-    rescue
-      event.respond "https://github.com/#{repo}/issues/#{number}"
+        response = "`#{reference}` - #{type} by @#{user}: \"#{title}\" \n[#{url}]"
+      rescue Octokit::NotFound => e
+        response = "`#{reference}` isn't an issue or pull request in `#{repo}`"
+      rescue StandardError => e
+        response = "https://github.com/#{repo}/issues/#{number}"
+      end
+
+      event.respond(response)
     end
   end
 end
