@@ -1,14 +1,14 @@
 require 'discordrb'
 require 'octokit'
 
-if ENV['TOKEN']
-  bot = Discordrb::Bot.new(token: ENV['TOKEN'])
+if ENV['DISCORD_BOT_TOKEN']
+  bot = Discordrb::Bot.new(token: ENV['DISCORD_BOT_TOKEN'])
 else
   raise 'Please provide a TOKEN for your Discord bot'
 end
 
-if ENV['ACCESS_TOKEN']
-  client = Octokit::Client.new(access_token: ENV['ACCESS_TOKEN'])
+if ENV['GITHUB_ACCESS_TOKEN']
+  client = Octokit::Client.new(access_token: ENV['GITHUB_ACCESS_TOKEN'])
 else
   client = Octokit::Client.new
 end
