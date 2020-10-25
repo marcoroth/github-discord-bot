@@ -33,9 +33,9 @@ bot.reaction_add do |event|
   event.message.delete if event.message.author == bot.bot_user && action_allowed?(event)
 end
 
-bot.mention(contains: '!add') do |event|
+bot.mention(contains: 'add') do |event|
   if action_allowed?(event)
-    matches = event.text.scan(%r{!add (.+) (.+/.+)}).first
+    matches = event.text.scan(%r{add (.+) (.+/.+)}).first
 
     if matches&.length == 2
       shortcut, repo = matches
@@ -44,14 +44,14 @@ bot.mention(contains: '!add') do |event|
 
       event.respond("Added mapping for shortcut `#{shortcut}` and repo `#{repo}`. \nTry `#{shortcut}#<number>`")
     else
-      event.respond "Usage: `!add <shortcut> <repo>` \nExample: `!add MR marcoroth/github-bot`"
+      event.respond "Usage: `add <shortcut> <repo>` \nExample: `add MR marcoroth/github-bot`"
     end
   end
 end
 
-bot.mention(contains: '!remove') do |event|
+bot.mention(contains: 'remove') do |event|
   if action_allowed?(event)
-    matches = event.text.scan(/!remove (.+)/).first
+    matches = event.text.scan(/remove (.+)/).first
 
     if matches&.length == 1
       shortcut = matches[0]
@@ -59,12 +59,12 @@ bot.mention(contains: '!remove') do |event|
 
       event.respond("Removed mapping for shortcut `#{shortcut}`")
     else
-      event.respond "Usage: `!remove <shortcut>` \nExample: `!remove MR`"
+      event.respond "Usage: `remove <shortcut>` \nExample: `remove MR`"
     end
   end
 end
 
-bot.mention(contains: '!list') do |event|
+bot.mention(contains: 'list') do |event|
   if action_allowed?(event)
     server_mappings(event).each do |key, repo|
       event << "`#{key}` => `#{repo}`"
