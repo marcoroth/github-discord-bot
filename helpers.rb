@@ -27,5 +27,7 @@ def role?(id, roles)
 end
 
 def action_allowed?(event)
-  event.server && role?(event.server.id, event.user.roles.map(&:name))
+  return false unless event.server
+
+  event.user == event.server.owner || role?(event.server.id, event.user.roles.map(&:name))
 end
