@@ -23,6 +23,8 @@ bot.ready do
     next if @redis.get(key)
 
     @redis.set(key, '1')
+    @redis.sadd("#{key}:roles", 'admin')
+    @redis.sadd("#{key}:roles", 'contributor')
     @redis.sadd("#{key}:roles", 'moderator')
   end
 end
